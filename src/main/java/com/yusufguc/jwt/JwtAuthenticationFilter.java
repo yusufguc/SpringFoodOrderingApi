@@ -5,7 +5,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +18,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
+@RequiredArgsConstructor
+@Log4j2
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
     private  JwtService jwtService;
-
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Override
@@ -63,9 +63,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (JwtException e) {
-            System.out.println("JWT could not be verified " + e.getMessage());
+            log.error("JWT could not be verified: {}", e.getMessage());
         }catch (Exception e) {
-            System.out.println("Filter general error " + e.getMessage());
+            log.error("Filter general error: {}", e.getMessage());
         }
         filterChain.doFilter(request,response);
     }
