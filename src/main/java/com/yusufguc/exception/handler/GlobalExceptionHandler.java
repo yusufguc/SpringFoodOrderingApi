@@ -51,10 +51,10 @@ public class GlobalExceptionHandler {
                 });
 
         ApiError<Map<String, List<String>>> apiError =
-                createApiError(errors, MessageType.GENERAL_EXCEPTION, request);
+                createApiError(errors, MessageType.VALIDATION_EXCEPTION, request);
 
         return ResponseEntity
-                .badRequest()
+                .status(MessageType.VALIDATION_EXCEPTION.getHttpStatus())
                 .body(apiError);
     }
 
