@@ -9,6 +9,7 @@ import com.yusufguc.service.AuthService;
 import com.yusufguc.service.RefreshTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,8 @@ public class AuthControllerImpl implements AuthController {
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request) {
 
-        return ResponseEntity.ok(authService.register(request));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(authService.register(request));
     }
 
     @PostMapping("/authenticate")
@@ -39,7 +41,7 @@ public class AuthControllerImpl implements AuthController {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
-    @PostMapping("/refreshToken")
+    @PostMapping("/refresh-token")
     @Override
     public ResponseEntity<AuthResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
         return ResponseEntity.ok(refreshTokenService.refreshToken(request));
