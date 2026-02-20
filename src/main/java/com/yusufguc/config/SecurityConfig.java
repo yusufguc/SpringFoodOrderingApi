@@ -21,7 +21,6 @@ public class SecurityConfig {
 
 
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-
     private  final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
