@@ -11,6 +11,11 @@ public enum MessageType {
     INVALID_CREDENTIALS("1002","Invalid username or password",HttpStatus.CONFLICT),
     REFRESH_TOKEN_INVALID("1003","Refresh token invalid",HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_EXPIRED("1004","Refresh token expired",HttpStatus.UNAUTHORIZED),
+    USERNAME_NOT_FOUND("1005", "Username not found", HttpStatus.NOT_FOUND),
+    ALREADY_RESTAURANT_OWNER("1006", "User is already a restaurant owner", HttpStatus.CONFLICT),
+    PENDING_OWNER_REQUEST_EXISTS("1007", "You already have a pending owner request", HttpStatus.CONFLICT),
+    REQUEST_NOT_FOUND("1008", "Request not found", HttpStatus.NOT_FOUND),
+    REQUEST_ALREADY_PROCESSED("1009", "Request has already been processed", HttpStatus.CONFLICT),
     GENERAL_EXCEPTION("9999", "A general error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final  String code;
