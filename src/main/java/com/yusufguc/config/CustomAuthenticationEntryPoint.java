@@ -20,10 +20,20 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
 
+        String authHeader = request.getHeader("Authorization");
+        String message;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            message = "Token is missing";
+        } else {
+            message = "Invalid or expired token";
+        }
+
         response.getWriter().write("""
             {
-              "error": "Invalid username or password"
+              "error": "Unauthorized",
+              "message": "%s"
             }
-        """);
+        """.formatted(message));
     }
 }
