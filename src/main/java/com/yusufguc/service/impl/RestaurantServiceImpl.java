@@ -1,0 +1,188 @@
+package com.yusufguc.service.impl;
+
+import com.yusufguc.dto.request.RestaurantRequest;
+import com.yusufguc.dto.response.RestaurantResponse;
+import com.yusufguc.exception.base.BaseException;
+import com.yusufguc.exception.message.ErrorMessage;
+import com.yusufguc.exception.message.MessageType;
+import com.yusufguc.mapper.RestaurantMapper;
+import com.yusufguc.model.Restaurant;
+import com.yusufguc.model.User;
+import com.yusufguc.pagination.PagerUtil;
+import com.yusufguc.pagination.RestPageableRequest;
+import com.yusufguc.pagination.RestPageableResponse;
+import com.yusufguc.repository.RestaurantRepository;
+import com.yusufguc.security.CurrentUserService;
+import com.yusufguc.service.RestaurantService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class RestaurantServiceImpl implements RestaurantService {
+
+    private final RestaurantRepository restaurantRepository;
+    private final RestaurantMapper restaurantMapper;
+    private final CurrentUserService currentUserService;
+
+
+    @Transactional
+    @Override
+    public RestaurantResponse createRestaurant(RestaurantRequest request) {
+
+         if (restaurantRepository.existsByName(request.getName())){
+             throw new BaseException(new ErrorMessage(MessageType.RESTAURANT_NAME_ALREADY_EXISTS,request.getName()));
+         }
+
+        Restaurant restaurant = restaurantMapper.toEntity(request);
+
+        User user=currentUserService.getCurrentUser();
+        restaurant.setOwner(user);
+
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+
+        return restaurantMapper.toResponse(savedRestaurant);
+    }
+
+
+    @Transactional
+    @Override
+    public RestaurantResponse updateRestaurant(Long restaurantId, RestaurantRequest request) {
+
+        Restaurant restaurantDb = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.RESTAURANT_NOT_FOUND, restaurantId.toString())));
+
+        User currentUser = currentUserService.getCurrentUser();
+        if (!currentUser.getId().equals(restaurantDb.getOwner().getId())){
+            throw new BaseException(new ErrorMessage(MessageType.NOT_RESTAURANT_OWNER,null));
+        }
+
+        if (restaurantRepository.existsByNameAndIdNot(request.getName(),restaurantId)){
+            throw new BaseException(new ErrorMessage(MessageType.RESTAURANT_NAME_ALREADY_EXISTS,request.getName()));
+        }
+
+        restaurantMapper.updateRestaurantFromDto(request,restaurantDb);
+        Restaurant savedRestaurant = restaurantRepository.save(restaurantDb);
+
+        return restaurantMapper.toResponse(savedRestaurant);
+    }
+
+    @Transactional
+    @Override
+    public void deleteRestaurant(Long restaurantId) {
+        Restaurant restaurantDb = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.RESTAURANT_NOT_FOUND, restaurantId.toString())));
+
+        User currentUser = currentUserService.getCurrentUser();
+        if (!currentUser.getId().equals(restaurantDb.getOwner().getId())){
+            throw new BaseException(new ErrorMessage(MessageType.NOT_RESTAURANT_OWNER,null));
+        }
+        restaurantRepository.delete(restaurantDb);
+    }
+
+    @Override
+    public RestPageableResponse<RestaurantResponse> getAllRestaurant(
+            RestPageableRequest request) {
+
+        Pageable pageable = PagerUtil.toPageable(request);
+
+        Page<Restaurant> page = restaurantRepository.findAll(pageable);
+
+        List<RestaurantResponse> content = page.getContent()
+                .stream()
+                .map(restaurantMapper::toResponse)
+                .toList();
+
+        return RestPageableResponse.<RestaurantResponse>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .build();
+    }
+
+    @Override
+    public RestPageableResponse<RestaurantResponse> searchByName(String name, RestPageableRequest request) {
+        Pageable pageable = PagerUtil.toPageable(request);
+
+        Page<Restaurant> page;
+
+        if (name == null || name.isBlank()) {
+            page = restaurantRepository.findAll(pageable);
+        } else {
+            page = restaurantRepository.findByNameContainingIgnoreCase(name, pageable);
+        }
+
+        List<RestaurantResponse> content = page.stream()
+                .map(restaurantMapper::toResponse)
+                .toList();
+
+        return RestPageableResponse.<RestaurantResponse>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .build();
+    }
+
+    @Override
+    public RestPageableResponse<RestaurantResponse> filterByOpenStatus(boolean open, RestPageableRequest request) {
+
+        Pageable pageable = PagerUtil.toPageable(request);
+
+        Page<Restaurant> page = restaurantRepository.findByOpen(open, pageable);
+
+        List<RestaurantResponse> content = page.stream()
+                .map(restaurantMapper::toResponse)
+                .toList();
+
+        return RestPageableResponse.<RestaurantResponse>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .build();
+    }
+
+    @Override
+    public RestPageableResponse<RestaurantResponse> getMyRestaurants(RestPageableRequest request) {
+        Pageable pageable = PagerUtil.toPageable(request);
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        Page<Restaurant> page = restaurantRepository.findByOwnerId(currentUser.getId(), pageable);
+
+        List<RestaurantResponse> content = page
+                .getContent()
+                .stream()
+                .map(restaurantMapper::toResponse)
+                .toList();
+
+        return RestPageableResponse.<RestaurantResponse>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .build();
+    }
+
+
+}

@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/api/owner-requests")
+@RequestMapping("/api/v1/owner-requests")
 @RequiredArgsConstructor
 public class OwnerRequestControllerImpl implements OwnerRequestController {
 

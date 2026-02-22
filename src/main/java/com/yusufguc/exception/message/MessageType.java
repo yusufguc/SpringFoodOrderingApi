@@ -16,6 +16,9 @@ public enum MessageType {
     PENDING_OWNER_REQUEST_EXISTS("1007", "You already have a pending owner request", HttpStatus.CONFLICT),
     REQUEST_NOT_FOUND("1008", "Request not found", HttpStatus.NOT_FOUND),
     REQUEST_ALREADY_PROCESSED("1009", "Request has already been processed", HttpStatus.CONFLICT),
+    RESTAURANT_NAME_ALREADY_EXISTS("1010", "Restaurant name already exists", HttpStatus.CONFLICT),
+    RESTAURANT_NOT_FOUND("1011", "Restaurant not found", HttpStatus.NOT_FOUND),
+    NOT_RESTAURANT_OWNER("1012", "This restaurant does not belong to you", HttpStatus.FORBIDDEN),
     GENERAL_EXCEPTION("9999", "A general error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final  String code;
