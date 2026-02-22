@@ -21,5 +21,7 @@ public interface RestaurantService {
 
     public  RestPageableResponse<RestaurantResponse> getMyRestaurants(RestPageableRequest request);
 
-}
+    public RestaurantResponse toggleOpenStatus(Long restaurantId);
+
+    }
 

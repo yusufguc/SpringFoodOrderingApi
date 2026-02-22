@@ -184,5 +184,23 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .build();
     }
 
+    @Transactional
+    @Override
+    public RestaurantResponse toggleOpenStatus(Long restaurantId) {
+
+        Restaurant restaurantDb = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new BaseException(new ErrorMessage(MessageType.RESTAURANT_NOT_FOUND, restaurantId.toString())));
+
+        User currentUser = currentUserService.getCurrentUser();
+        if (!currentUser.getId().equals(restaurantDb.getOwner().getId())){
+            throw new BaseException(new ErrorMessage(MessageType.NOT_RESTAURANT_OWNER,null));
+        }
+
+        restaurantDb.setOpen(!restaurantDb.isOpen());
+        Restaurant saved = restaurantRepository.save(restaurantDb);
+
+        return restaurantMapper.toResponse(saved);
+    }
+
 
 }

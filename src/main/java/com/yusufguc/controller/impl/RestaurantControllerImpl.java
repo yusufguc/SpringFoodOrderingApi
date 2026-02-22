@@ -88,4 +88,11 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.ok(restaurantService.getMyRestaurants(request));
     }
 
+    @PreAuthorize("hasRole('RESTAURANT_OWNER')")
+    @PutMapping("/{restaurantId}/toggle-status")
+    @Override
+    public ResponseEntity<RestaurantResponse> toggleOpenStatus(@PathVariable Long restaurantId) {
+        return ResponseEntity.ok(restaurantService.toggleOpenStatus(restaurantId));
+    }
+
 }

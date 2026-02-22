@@ -21,4 +21,6 @@ public interface RestaurantController {
     public ResponseEntity<RestPageableResponse<RestaurantResponse>> filterByOpenStatus(boolean open, RestPageableRequest request);
 
     public ResponseEntity<RestPageableResponse<RestaurantResponse>> getMyRestaurants(RestPageableRequest request);
+
+    public ResponseEntity<RestaurantResponse> toggleOpenStatus(Long restaurantId);
 }
