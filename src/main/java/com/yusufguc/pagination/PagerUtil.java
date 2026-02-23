@@ -1,11 +1,13 @@
 package com.yusufguc.pagination;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.function.Function;
 
 @UtilityClass
 public class PagerUtil {
@@ -46,5 +48,26 @@ public class PagerUtil {
                     Sort.by(direction, request.getSortBy()));
         }
         return PageRequest.of(page, size);
+    }
+
+    public static <T, R> RestPageableResponse<R> toPageResponse(
+            Page<T> page,
+            Function<T, R> mapper
+    ) {
+
+        List<R> content = page.getContent()
+                .stream()
+                .map(mapper)
+                .toList();
+
+        return RestPageableResponse.<R>builder()
+                .content(content)
+                .pageNumber(page.getNumber())
+                .pageSize(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .first(page.isFirst())
+                .last(page.isLast())
+                .build();
     }
 }

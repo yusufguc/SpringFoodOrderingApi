@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -94,20 +93,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Page<Restaurant> page = restaurantRepository.findAll(pageable);
 
-        List<RestaurantResponse> content = page.getContent()
-                .stream()
-                .map(restaurantMapper::toResponse)
-                .toList();
-
-        return RestPageableResponse.<RestaurantResponse>builder()
-                .content(content)
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .first(page.isFirst())
-                .last(page.isLast())
-                .build();
+        return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
     @Override
@@ -122,19 +108,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             page = restaurantRepository.findByNameContainingIgnoreCase(name, pageable);
         }
 
-        List<RestaurantResponse> content = page.stream()
-                .map(restaurantMapper::toResponse)
-                .toList();
-
-        return RestPageableResponse.<RestaurantResponse>builder()
-                .content(content)
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .first(page.isFirst())
-                .last(page.isLast())
-                .build();
+        return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
     @Override
@@ -144,19 +118,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Page<Restaurant> page = restaurantRepository.findByOpen(open, pageable);
 
-        List<RestaurantResponse> content = page.stream()
-                .map(restaurantMapper::toResponse)
-                .toList();
-
-        return RestPageableResponse.<RestaurantResponse>builder()
-                .content(content)
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .first(page.isFirst())
-                .last(page.isLast())
-                .build();
+        return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
     @Override
@@ -167,21 +129,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Page<Restaurant> page = restaurantRepository.findByOwnerId(currentUser.getId(), pageable);
 
-        List<RestaurantResponse> content = page
-                .getContent()
-                .stream()
-                .map(restaurantMapper::toResponse)
-                .toList();
-
-        return RestPageableResponse.<RestaurantResponse>builder()
-                .content(content)
-                .pageNumber(page.getNumber())
-                .pageSize(page.getSize())
-                .totalElements(page.getTotalElements())
-                .totalPages(page.getTotalPages())
-                .first(page.isFirst())
-                .last(page.isLast())
-                .build();
+        return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
     @Transactional
