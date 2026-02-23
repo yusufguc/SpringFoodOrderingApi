@@ -19,6 +19,8 @@ public enum MessageType {
     RESTAURANT_NAME_ALREADY_EXISTS("1010", "Restaurant name already exists", HttpStatus.CONFLICT),
     RESTAURANT_NOT_FOUND("1011", "Restaurant not found", HttpStatus.NOT_FOUND),
     NOT_RESTAURANT_OWNER("1012", "This restaurant does not belong to you", HttpStatus.FORBIDDEN),
+    CATEGORY_NAME_ALREADY_EXISTS("1013", "Category with name  already exists", HttpStatus.CONFLICT),
+    CATEGORY_NOT_FOUND("1014", "Category not found with id", HttpStatus.NOT_FOUND),
     GENERAL_EXCEPTION("9999", "A general error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final  String code;
