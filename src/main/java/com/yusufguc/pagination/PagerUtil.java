@@ -17,7 +17,7 @@ public class PagerUtil {
     private static final int MAX_PAGE_SIZE = 100;
 
     private static final List<String> ALLOWED_SORT_FIELDS =
-            List.of("name", "createdAt", "city");
+            List.of("name", "createdAt", "price","stock");
 
     public Pageable toPageable(RestPageableRequest request) {
         if (request == null) {

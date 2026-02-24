@@ -21,6 +21,10 @@ public enum MessageType {
     NOT_RESTAURANT_OWNER("1012", "This restaurant does not belong to you", HttpStatus.FORBIDDEN),
     CATEGORY_NAME_ALREADY_EXISTS("1013", "Category with name  already exists", HttpStatus.CONFLICT),
     CATEGORY_NOT_FOUND("1014", "Category not found with id", HttpStatus.NOT_FOUND),
+    PRODUCT_NOT_FOUND("3001", "Product not found with id ", HttpStatus.NOT_FOUND),
+    PRODUCT_OUT_OF_STOCK("3002", "Product is out of stock", HttpStatus.BAD_REQUEST),
+    INSUFFICIENT_STOCK("3003", "Insufficient stock for product.", HttpStatus.BAD_REQUEST),
+    INVALID_STOCK_CHANGE("3004", "Invalid stock change operation.", HttpStatus.BAD_REQUEST),
     GENERAL_EXCEPTION("9999", "A general error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final  String code;
