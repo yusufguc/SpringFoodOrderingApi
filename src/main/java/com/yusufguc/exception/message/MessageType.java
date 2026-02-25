@@ -25,6 +25,12 @@ public enum MessageType {
     PRODUCT_OUT_OF_STOCK("3002", "Product is out of stock", HttpStatus.BAD_REQUEST),
     INSUFFICIENT_STOCK("3003", "Insufficient stock for product.", HttpStatus.BAD_REQUEST),
     INVALID_STOCK_CHANGE("3004", "Invalid stock change operation.", HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND("4001", "Order not found with id: %s", HttpStatus.NOT_FOUND),
+    ORDER_ALREADY_COMPLETED("4002", "Order has already been completed and cannot be modified", HttpStatus.CONFLICT),
+    INVALID_ORDER_STATUS_TRANSITION("4003", "Invalid status transition ", HttpStatus.BAD_REQUEST),
+    ORDER_STATUS_CANNOT_BE_NULL("4004", "Order status cannot be null", HttpStatus.BAD_REQUEST),
+    NOT_ORDER_OWNER("4005", "This order does not belong to you", HttpStatus.FORBIDDEN),
+    ORDER_CANNOT_BE_CANCELLED("4006", "Order cannot be cancelled. Current status: ", HttpStatus.BAD_REQUEST),
     GENERAL_EXCEPTION("9999", "A general error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final  String code;
