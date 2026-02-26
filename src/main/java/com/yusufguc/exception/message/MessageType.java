@@ -31,6 +31,10 @@ public enum MessageType {
     ORDER_STATUS_CANNOT_BE_NULL("4004", "Order status cannot be null", HttpStatus.BAD_REQUEST),
     NOT_ORDER_OWNER("4005", "This order does not belong to you", HttpStatus.FORBIDDEN),
     ORDER_CANNOT_BE_CANCELLED("4006", "Order cannot be cancelled. Current status: ", HttpStatus.BAD_REQUEST),
+    CART_NOT_FOUND("5001","cart not found",HttpStatus.BAD_REQUEST),
+    CART_IS_EMPTY("5002","Cart is empty",HttpStatus.BAD_REQUEST),
+    DIFFERENT_RESTAURANT_NOT_ALLOWED("5003", "Only products from the same restaurant can be added to the cart", HttpStatus.BAD_REQUEST),
+    INVALID_QUANTITY("5004","Invalid quantity",HttpStatus.BAD_REQUEST),
     GENERAL_EXCEPTION("9999", "A general error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final  String code;
