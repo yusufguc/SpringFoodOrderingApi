@@ -9,12 +9,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service responsible for retrieving the currently authenticated user.
+ * Acts as a bridge between Spring Security's context and the database.
+ */
 @Service
 @RequiredArgsConstructor
 public class CurrentUserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Fetches the User entity associated with the current security context.
+     * * @return The authenticated User entity.
+     * @throws BaseException if the authenticated username is not found in the database.
+     */
     public User getCurrentUser() {
 
         String username = SecurityContextHolder

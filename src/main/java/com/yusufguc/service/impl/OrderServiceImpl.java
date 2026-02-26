@@ -38,6 +38,11 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final OrderMapper orderMapper;
 
+    /**
+     * Creates a new order for the current user.
+     * Checks if products exist, are active, and have sufficient stock.
+     * Deducts product stock accordingly.
+     */
     @Transactional
     @Override
     public OrderResponse createOrder(OrderRequest orderRequest) {
@@ -82,6 +87,12 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponse(order);
 
     }
+
+    /**
+     * Updates the status of an order.
+     * Only restaurant owner can update.
+     * Validates allowed status transitions and prevents updates on completed orders.
+     */
 
     @Transactional
     @Override
@@ -137,6 +148,11 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponse(order);
     }
 
+    /**
+     * Cancels an order.
+     * Only the order owner can cancel.
+     * Only pending orders can be cancelled.
+     */
     @Transactional
     @Override
     public OrderResponse cancelOrder(Long orderId) {
@@ -156,6 +172,9 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponse(orderRepository.save(order));
     }
 
+    /**
+     * Returns paginated list of orders for current user.
+     */
     @Override
     public RestPageableResponse<OrderResponse> getMyOrders(RestPageableRequest pageableRequest) {
 
@@ -168,6 +187,10 @@ public class OrderServiceImpl implements OrderService {
         return PagerUtil.toPageResponse(orderPage,orderMapper::toResponse);
     }
 
+    /**
+     * Retrieves an order by ID.
+     * Only the order owner or restaurant owner can access.
+     */
     @Override
     public OrderResponse getOrderById(Long orderId) {
 
@@ -187,6 +210,10 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponse(order);
     }
 
+    /**
+     * Retrieves paginated orders for a restaurant.
+     * Only restaurant owner can access.
+     */
     @Override
     public RestPageableResponse<OrderResponse> getOrdersByRestaurant(Long restaurantId,RestPageableRequest pageableRequest) {
 

@@ -17,6 +17,10 @@ public class CartControllerImpl implements CartController {
 
     private final CartService cartService;
 
+    /**
+     * Adds a new product to the authenticated user's cart or updates the quantity of an existing item.
+     * Restricted to users with the 'USER' role.
+     */
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/add")
     @Override
@@ -24,6 +28,9 @@ public class CartControllerImpl implements CartController {
         return ResponseEntity.ok(cartService.addToCart(request));
     }
 
+    /**
+     * Retrieves the current shopping cart details, including items and total price, for the authenticated user.
+     */
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/my-cart")
     @Override
@@ -31,6 +38,10 @@ public class CartControllerImpl implements CartController {
         return ResponseEntity.ok(cartService.getMyCart());
     }
 
+    /**
+     * Decreases the quantity of a specific product in the cart.
+     * If the quantity reaches zero or no quantity is specified, the item is removed from the cart.
+     */
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/remove/{productId}")
     @Override
@@ -40,6 +51,10 @@ public class CartControllerImpl implements CartController {
         return ResponseEntity.ok(cartService.removeFromCart(productId, quantity));
     }
 
+    /**
+     * Removes all items from the user's shopping cart.
+     * Returns '204 No Content' upon successful operation.
+     */
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/clear")
     @Override
@@ -47,7 +62,10 @@ public class CartControllerImpl implements CartController {
         cartService.clearCart();
         return ResponseEntity.noContent().build();
     }
-
+    /**
+     * Validates and converts the current cart items into a formal Order.
+     * Clears the cart upon successful order creation and returns the order summary.
+     */
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/checkout")
     @Override

@@ -7,6 +7,10 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object representing an item within the user's shopping cart.
+ * Provides simplified product details for the frontend display.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

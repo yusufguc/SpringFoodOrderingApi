@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class OrderControllerImpl implements OrderController {
 
     private final OrderService orderService;
+
+    /**
+     * Creates a new order. Authorized for 'USER' only.
+     */
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     @Override
@@ -28,6 +32,9 @@ public class OrderControllerImpl implements OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Updates an order's status. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/{orderId}/status")
     @Override
@@ -37,6 +44,9 @@ public class OrderControllerImpl implements OrderController {
                 orderService.updateOrderStatus(orderId, newStatus));
     }
 
+    /**
+     * Cancels an existing order. Authorized for the 'USER' who placed the order.
+     */
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/{orderId}/cancel")
     @Override
@@ -44,7 +54,9 @@ public class OrderControllerImpl implements OrderController {
         return ResponseEntity.ok(orderService.cancelOrder(orderId));
     }
 
-
+    /**
+     * Retrieves a paginated list of orders for the authenticated user.
+     */
     @PreAuthorize("hasRole('USER')")
     @GetMapping
     @Override
@@ -53,6 +65,9 @@ public class OrderControllerImpl implements OrderController {
         return ResponseEntity.ok(orderService.getMyOrders(pageableRequest));
     }
 
+    /**
+     * Retrieves specific order details by ID. Authorized for both 'USER' and 'RESTAURANT_OWNER'.
+     */
     @PreAuthorize("hasAnyRole('USER','RESTAURANT_OWNER')")
     @GetMapping("/{orderId}")
     @Override
@@ -60,6 +75,9 @@ public class OrderControllerImpl implements OrderController {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
+    /**
+     * Retrieves a paginated list of orders for a specific restaurant. Authorized for 'RESTAURANT_OWNER'.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @GetMapping("/restaurant/{restaurantId}")
     @Override

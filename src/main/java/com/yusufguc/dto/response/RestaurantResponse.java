@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Data Transfer Object providing a public overview of a restaurant.
+ * Includes both operational details and simplified owner information.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

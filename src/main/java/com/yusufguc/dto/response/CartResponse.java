@@ -8,6 +8,10 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Data Transfer Object for the complete shopping cart details.
+ * Aggregates all items and provides the final calculated total for the user.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

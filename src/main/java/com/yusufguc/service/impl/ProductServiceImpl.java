@@ -35,6 +35,10 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final ProductRepository productRepository;
 
+    /**
+     * Creates a new product or updates stock if product with the same name exists in the category.
+     * Only the restaurant owner can create or update products.
+     */
     @Transactional
     @Override
     public ProductResponse createProduct(Long categoryId,ProductRequest productRequest) {
@@ -73,6 +77,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(save);
     }
 
+    /**
+     * Updates product details.
+     * Only restaurant owner can update.
+     * Updates active status based on stock changes.
+     */
     @Transactional
     @Override
     public ProductResponse updateProduct(Long productId, ProductRequest productRequest) {
@@ -97,6 +106,10 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(save);
     }
 
+    /**
+     * Soft deletes a product by setting it inactive.
+     * Only restaurant owner can perform this action.
+     */
     @Transactional
     @Override
     public void deleteProduct(Long productId) {
@@ -113,6 +126,11 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    /**
+     * Retrieves a product by ID.
+     * If current user is restaurant owner, product is always visible.
+     * Otherwise, product must be active and have stock > 0.
+     */
     @Override
     public ProductResponse getProductById(Long productId) {
         Product product = productRepository.findById(productId)
@@ -137,6 +155,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(product);
     }
 
+    /**
+     * Toggles product's active status.
+     * Cannot activate a product with 0 stock.
+     * Only restaurant owner can perform this action.
+     */
     @Transactional
     @Override
     public ProductResponse toggleProductStatus(Long productId) {
@@ -159,6 +182,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(product);
     }
 
+    /**
+     * Updates the stock of a product.
+     * Validates stock change and updates active status.
+     * Only restaurant owner can perform this action.
+     */
     @Transactional
     @Override
     public ProductResponse updateStock(Long productId,StockUpdateRequest request) {
@@ -192,6 +220,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toResponse(product);
     }
 
+    /**
+     * Retrieves all active products for a given category with pagination.
+     */
     @Override
     public RestPageableResponse<ProductResponse> getProductsByCategory(Long categoryId,
                                                                        RestPageableRequest pageableRequest) {

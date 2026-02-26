@@ -32,6 +32,11 @@ public class CategoryServiceImpl implements CategoryService {
     private final CurrentUserService currentUserService;
     private final CategoryMapper categoryMapper;
 
+    /**
+     * Creates a new category for a restaurant.
+     * Checks if current user is the restaurant owner.
+     * Throws exception if restaurant not found or category name already exists.
+     */
     @Transactional
     @Override
     public CategoryResponse createCategory(Long restaurantId, CategoryRequest request) {
@@ -55,6 +60,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toResponse(saved);
     }
 
+    /**
+     * Updates an existing category.
+     * Checks ownership and ensures new name doesn't conflict with existing categories.
+     */
     @Transactional
     @Override
     public CategoryResponse updateCategory(Long categoryId, CategoryRequest request) {
@@ -79,6 +88,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toResponse(saved);
     }
 
+    /**
+     * Deletes a category.
+     * Checks ownership and throws exception if category or authorization fails.
+     */
     @Transactional
     @Override
     public void deleteCategory(Long categoryId) {
@@ -93,6 +106,10 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
+    /**
+     * Retrieves a category by its ID.
+     * Throws exception if not found.
+     */
     @Override
     public CategoryResponse getCategoryById(Long categoryId) {
 
@@ -102,6 +119,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toResponse(category);
     }
 
+    /**
+     * Retrieves paginated list of categories for a restaurant.
+     * Throws exception if restaurant not found.
+     */
     @Override
     public RestPageableResponse<CategoryResponse> getCategoriesByRestaurant(Long restaurantId, RestPageableRequest request) {
 
@@ -116,6 +137,10 @@ public class CategoryServiceImpl implements CategoryService {
         return PagerUtil.toPageResponse(categoryPage, categoryMapper::toResponse);
     }
 
+    /**
+     * Retrieves paginated list of categories for current user's restaurant.
+     * Checks ownership before returning results.
+     */
     @Override
     public RestPageableResponse<CategoryResponse> getMyCategories(Long restaurantId, RestPageableRequest request) {
 
@@ -132,6 +157,10 @@ public class CategoryServiceImpl implements CategoryService {
         return PagerUtil.toPageResponse(categoryPage, categoryMapper::toResponse);
     }
 
+    /**
+     * Searches categories by name for a restaurant with pagination.
+     * Ensures current user is the restaurant owner.
+     */
     @Override
     public RestPageableResponse<CategoryResponse> searchByName(Long restaurantId,String name, RestPageableRequest request) {
 

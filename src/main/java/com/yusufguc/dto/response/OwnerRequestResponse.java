@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+/**
+ * Data Transfer Object for displaying restaurant ownership requests.
+ * Used primarily by admins to review and manage pending applications.
+ */
 @Getter
 @Setter
 @AllArgsConstructor

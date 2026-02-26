@@ -20,7 +20,9 @@ public class RestaurantControllerImpl implements RestaurantController {
 
     private final RestaurantService restaurantService;
 
-
+    /**
+     * Creates a new restaurant profile. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PostMapping
     @Override
@@ -31,6 +33,9 @@ public class RestaurantControllerImpl implements RestaurantController {
                 .body(restaurantService.createRestaurant(request));
     }
 
+    /**
+     * Updates an existing restaurant's details. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/id/{restaurantId}")
     @Override
@@ -41,6 +46,9 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.ok(restaurantService.updateRestaurant(restaurantId,request));
     }
 
+    /**
+     * Deletes a restaurant by its ID. Authorized for 'ADMIN' or the 'RESTAURANT_OWNER'.
+     */
     @PreAuthorize("hasAnyRole('ADMIN','RESTAURANT_OWNER')")
     @DeleteMapping("id/{restaurantId}")
     @Override
@@ -50,6 +58,9 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Retrieves a paginated list of all registered restaurants. Accessible by any authenticated user.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Override
@@ -59,6 +70,9 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.ok(restaurantService.getAllRestaurant(request));
     }
 
+    /**
+     * Searches for restaurants by name. Accessible by any authenticated user.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/search")
     @Override
@@ -69,6 +83,9 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.ok(restaurantService.searchByName(name, request));
     }
 
+    /**
+     * Filters restaurants based on their current open/closed status. Accessible by any authenticated user.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/filter")
     @Override
@@ -79,6 +96,9 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.ok( restaurantService.filterByOpenStatus(open, request));
     }
 
+    /**
+     * Retrieves a paginated list of restaurants owned by the currently authenticated owner.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/my-restaurants")
     @Override
@@ -88,6 +108,9 @@ public class RestaurantControllerImpl implements RestaurantController {
         return ResponseEntity.ok(restaurantService.getMyRestaurants(request));
     }
 
+    /**
+     * Toggles the restaurant's status between open and closed. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/{restaurantId}/toggle-status")
     @Override

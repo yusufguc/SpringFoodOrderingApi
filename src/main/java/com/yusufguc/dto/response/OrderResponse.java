@@ -10,6 +10,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Data Transfer Object providing a comprehensive summary of a completed or ongoing order.
+ * Used to communicate order status and details back to the customer or restaurant owner.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

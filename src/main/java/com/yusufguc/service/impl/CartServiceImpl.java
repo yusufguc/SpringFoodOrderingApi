@@ -40,6 +40,11 @@ public class CartServiceImpl implements CartService {
     private final OrderService orderService;
 
 
+    /**
+     * Adds a product to the current user's cart.
+     * If the user has no cart, creates a new one.
+     * Throws exception if the product belongs to a different restaurant than the existing cart.
+     */
     @Transactional
     @Override
     public CartResponse addToCart(CartItemRequest request) {
@@ -68,6 +73,10 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponse(cartRepository.save(cart));
     }
 
+    /**
+     * Removes a specified quantity of a product from the user's cart.
+     * Deletes the cart if it becomes empty after removal.
+     */
     @Transactional
     @Override
     public CartResponse removeFromCart(Long productId, Integer quantity) {
@@ -101,6 +110,10 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartResponse(cartRepository.save(cart));
     }
 
+    /**
+     * Retrieves the current user's cart.
+     * Returns empty cart if none exists.
+     */
     @Override
     public CartResponse getMyCart() {
         User currentUser = currentUserService.getCurrentUser();
@@ -115,6 +128,9 @@ public class CartServiceImpl implements CartService {
                 });
     }
 
+    /**
+     * Clears all items from the current user's cart.
+     */
     @Transactional
     @Override
     public void clearCart() {
@@ -122,6 +138,10 @@ public class CartServiceImpl implements CartService {
         cartRepository.deleteByUserId(currentUser.getId());
     }
 
+    /**
+     * Converts the current cart into an order and clears the cart.
+     * Throws exception if the cart is empty or not found.
+     */
     @Transactional
     @Override
     public OrderResponse checkout() {
@@ -148,6 +168,9 @@ public class CartServiceImpl implements CartService {
         return response;
     }
 
+    /**
+     * Updates an existing cart item or adds a new one if it doesn't exist.
+     */
     private void updateOrCreateCartItem(Cart cart, Product product, Integer quantity) {
         cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
@@ -165,6 +188,9 @@ public class CartServiceImpl implements CartService {
                 );
     }
 
+    /**
+     * Calculates the total price of the cart based on item quantities and prices.
+     */
     private void calculateTotalPrice(Cart cart) {
         BigDecimal total = cart.getItems().stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))

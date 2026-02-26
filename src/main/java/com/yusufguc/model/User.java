@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Represents the system user entity.
+ * Implements Spring Security's UserDetails for authentication and authorization.
+ */
 @Entity
 @Table(name = "users")
 @Getter
@@ -36,6 +40,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    /**
+     * Defines the user's role (e.g., USER, RESTAURANT_OWNER, ADMIN).
+     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -47,6 +54,10 @@ public class User implements UserDetails {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * Converts the user's role into a Spring Security granted authority.
+     * Prefixes the role name with "ROLE_".
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

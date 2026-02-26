@@ -30,7 +30,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantMapper restaurantMapper;
     private final CurrentUserService currentUserService;
 
-
+    /**
+     * Creates a new restaurant and assigns the current user as owner.
+     * Throws exception if restaurant name already exists.
+     */
     @Transactional
     @Override
     public RestaurantResponse createRestaurant(RestaurantRequest request) {
@@ -49,7 +52,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantMapper.toResponse(savedRestaurant);
     }
 
-
+    /**
+     * Updates restaurant information. Only the owner can update.
+     * Throws exception if name is already taken by another restaurant.
+     */
     @Transactional
     @Override
     public RestaurantResponse updateRestaurant(Long restaurantId, RestaurantRequest request) {
@@ -72,6 +78,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantMapper.toResponse(savedRestaurant);
     }
 
+    /**
+     * Deletes a restaurant. Only the owner can delete.
+     */
     @Transactional
     @Override
     public void deleteRestaurant(Long restaurantId) {
@@ -85,6 +94,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantRepository.delete(restaurantDb);
     }
 
+    /**
+     * Retrieves all restaurants with pagination.
+     */
     @Override
     public RestPageableResponse<RestaurantResponse> getAllRestaurant(
             RestPageableRequest request) {
@@ -96,6 +108,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
+    /**
+     * Searches restaurants by name. Returns all if name is null or blank.
+     */
     @Override
     public RestPageableResponse<RestaurantResponse> searchByName(String name, RestPageableRequest request) {
         Pageable pageable = PagerUtil.toPageable(request);
@@ -111,6 +126,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
+    /**
+     * Filters restaurants based on open status (open or closed) with pagination.
+     */
     @Override
     public RestPageableResponse<RestaurantResponse> filterByOpenStatus(boolean open, RestPageableRequest request) {
 
@@ -121,6 +139,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
+    /**
+     * Retrieves restaurants owned by current user with pagination.
+     */
     @Override
     public RestPageableResponse<RestaurantResponse> getMyRestaurants(RestPageableRequest request) {
         Pageable pageable = PagerUtil.toPageable(request);
@@ -132,6 +153,10 @@ public class RestaurantServiceImpl implements RestaurantService {
         return PagerUtil.toPageResponse(page, restaurantMapper::toResponse);
     }
 
+    /**
+     * Toggles the open status of the restaurant. Only the owner can perform this.
+     * Returns the updated restaurant response.
+     */
     @Transactional
     @Override
     public RestaurantResponse toggleOpenStatus(Long restaurantId) {

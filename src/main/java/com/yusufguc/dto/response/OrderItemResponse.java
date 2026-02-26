@@ -7,6 +7,10 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object representing a single line item in a finalized order.
+ * Contains a snapshot of product details and pricing at the time of purchase.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -19,6 +19,10 @@ public class OwnerRequestControllerImpl implements OwnerRequestController {
     private final OwnerRequestService ownerRequestService;
     private final CurrentUserService currentUserService;
 
+
+    /**
+     * Creates a new request to become a restaurant owner. Authorized for 'USER' only.
+     */
     @PostMapping()
     @PreAuthorize("hasRole('USER')")
     @Override
@@ -27,6 +31,9 @@ public class OwnerRequestControllerImpl implements OwnerRequestController {
                 .body(ownerRequestService.createRequest());
     }
 
+    /**
+     * Approves a restaurant owner request. Authorized for 'ADMIN' only.
+     */
     @PutMapping("/approve/{requestId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Override
@@ -38,6 +45,9 @@ public class OwnerRequestControllerImpl implements OwnerRequestController {
         return ResponseEntity.ok(ownerRequestService.approveRequest(requestId,admin));
     }
 
+    /**
+     * Rejects a restaurant owner request. Authorized for 'ADMIN' only.
+     */
     @PutMapping("/reject/{requestId}")
     @PreAuthorize("hasRole('ADMIN')")
     @Override

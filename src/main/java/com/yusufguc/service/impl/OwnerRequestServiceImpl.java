@@ -27,6 +27,12 @@ public class OwnerRequestServiceImpl implements OwnerRequestService {
     private final CurrentUserService currentUserService;
     private final UserRepository userRepository;
 
+
+    /**
+     * Creates a new owner request for the current user.
+     * Only users who are not already restaurant owners can create a request.
+     * Throws exception if a pending request already exists.
+     */
     @Override
     public OwnerRequestResponse createRequest() {
 
@@ -51,6 +57,11 @@ public class OwnerRequestServiceImpl implements OwnerRequestService {
         return ownerRequestMapper.toResponse(saved);
     }
 
+    /**
+     * Approves a pending owner request.
+     * Only admins can perform this action (admin passed as parameter).
+     * Updates the user's role to RESTAURANT_OWNER and marks request as APPROVED.
+     */
     @Override
     public OwnerRequestResponse approveRequest(Long requestId, User admin) {
         OwnerRequest ownerRequest = ownerRequestRepository.findById(requestId)
@@ -71,6 +82,11 @@ public class OwnerRequestServiceImpl implements OwnerRequestService {
         return ownerRequestMapper.toResponse(saved) ;
     }
 
+    /**
+     * Rejects a pending owner request.
+     * Only admins can perform this action (admin passed as parameter).
+     * Marks request as REJECTED.
+     */
     @Override
     public OwnerRequestResponse rejectRequest(Long requestId, User admin) {
         OwnerRequest ownerRequest = ownerRequestRepository.findById(requestId)

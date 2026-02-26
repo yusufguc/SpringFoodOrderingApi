@@ -20,6 +20,10 @@ public class CategoryControllerImpl implements CategoryController {
 
     private final CategoryService categoryService;
 
+    /**
+     * Creates a new category for a specific restaurant.
+     * Restricted to users with the 'RESTAURANT_OWNER' role.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PostMapping("/restaurants/{restaurantId}/categories")
     @Override
@@ -29,6 +33,10 @@ public class CategoryControllerImpl implements CategoryController {
                 .body(categoryService.createCategory(restaurantId,request));
     }
 
+    /**
+     * Updates an existing category's information.
+     * Restricted to users with the 'RESTAURANT_OWNER' role who own the restaurant.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/categories/{categoryId}")
     @Override
@@ -37,6 +45,10 @@ public class CategoryControllerImpl implements CategoryController {
         return ResponseEntity.ok(categoryService.updateCategory(categoryId,request));
     }
 
+    /**
+     * Deletes a category by its unique ID.
+     * Restricted to 'RESTAURANT_OWNER'. Returns '204 No Content' upon success.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @DeleteMapping("/categories/{categoryId}")
     @Override
@@ -45,6 +57,10 @@ public class CategoryControllerImpl implements CategoryController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Retrieves details of a specific category by its ID.
+     * Accessible by any authenticated user.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/categories/{categoryId}")
     @Override
@@ -52,6 +68,10 @@ public class CategoryControllerImpl implements CategoryController {
         return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
     }
 
+    /**
+     * Retrieves a paginated list of categories belonging to a specific restaurant.
+     * Accessible by any authenticated user to browse the menu.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/restaurants/{restaurantId}/categories")
     @Override
@@ -59,7 +79,9 @@ public class CategoryControllerImpl implements CategoryController {
                                                                                             @ModelAttribute RestPageableRequest request) {
         return ResponseEntity.ok(categoryService.getCategoriesByRestaurant(restaurantId,request));
     }
-
+    /**
+     * Retrieves a paginated list of categories specifically for the restaurant owner's management view.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @GetMapping("/restaurants/{restaurantId}/my-categories")
     @Override
@@ -69,6 +91,10 @@ public class CategoryControllerImpl implements CategoryController {
         return ResponseEntity.ok(categoryService.getMyCategories(restaurantId,request));
     }
 
+    /**
+     * Searches for categories by name within a specific restaurant.
+     * Useful for administrative filtering or user search.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @GetMapping("/restaurants/{restaurantId}/categories/search")
     @Override

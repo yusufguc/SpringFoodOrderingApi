@@ -21,6 +21,9 @@ public class ProductControllerImpl implements ProductController {
 
     private final ProductService productService;
 
+    /**
+     * Creates a new product under a specific category. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PostMapping("/categories/{categoryId}/products")
     @Override
@@ -32,6 +35,9 @@ public class ProductControllerImpl implements ProductController {
                 .body(productService.createProduct(categoryId,productRequest));
     }
 
+    /**
+     * Updates an existing product's details. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/products/{productId}")
     @Override
@@ -40,6 +46,9 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.ok(productService.updateProduct(productId,productRequest));
     }
 
+    /**
+     * Deletes a product by its ID. Authorized for 'RESTAURANT_OWNER'. Returns '204 No Content' on success.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @DeleteMapping("/products/{productId}")
     @Override
@@ -48,6 +57,9 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Retrieves specific product details by ID. Accessible by any authenticated user.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/products/{productId}")
     @Override
@@ -55,6 +67,9 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.ok(productService.getProductById(productId));
     }
 
+    /**
+     * Toggles the active/passive status of a product. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/products/{productId}/toggle-status")
     @Override
@@ -62,6 +77,9 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.ok(productService.toggleProductStatus(productId));
     }
 
+    /**
+     * Updates the stock quantity of a product. Authorized for 'RESTAURANT_OWNER' only.
+     */
     @PreAuthorize("hasRole('RESTAURANT_OWNER')")
     @PutMapping("/products/{productId}/update-stock")
     @Override
@@ -70,6 +88,9 @@ public class ProductControllerImpl implements ProductController {
         return ResponseEntity.ok(productService.updateStock(productId,request));
     }
 
+    /**
+     * Retrieves a paginated list of products belonging to a specific category. Accessible by any authenticated user.
+     */
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/category/{categoryId}/products")
     @Override
