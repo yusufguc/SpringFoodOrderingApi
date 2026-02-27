@@ -20,7 +20,7 @@ public enum MessageType {
     REFRESH_TOKEN_INVALID("USR-2003", "Refresh token invalid", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_EXPIRED("USR-2004", "Refresh token expired", HttpStatus.UNAUTHORIZED),
 
-    // --- RESTAURANT & OWNER REQUESTS (3000 - 3999) ---
+    // --- RESTAURANT & OWNER REQUESTS & RATINGS (3000 - 3999) ---
     RESTAURANT_NOT_FOUND("RST-3000", "Restaurant not found", HttpStatus.NOT_FOUND),
     RESTAURANT_NAME_ALREADY_EXISTS("RST-3001", "Restaurant name already exists", HttpStatus.CONFLICT),
     ALREADY_RESTAURANT_OWNER("RST-3002", "User is already a restaurant owner", HttpStatus.CONFLICT),
@@ -28,6 +28,8 @@ public enum MessageType {
     PENDING_OWNER_REQUEST_EXISTS("RST-3004", "You already have a pending owner request", HttpStatus.CONFLICT),
     REQUEST_NOT_FOUND("RST-3005", "Request not found", HttpStatus.NOT_FOUND),
     REQUEST_ALREADY_PROCESSED("RST-3006", "Request has already been processed", HttpStatus.CONFLICT),
+    RATING_NOT_FOUND("RST-3007", "Rating not found ", HttpStatus.NOT_FOUND),
+    NOT_RATING_OWNER("RST-3008", "This rating does not belong to you", HttpStatus.FORBIDDEN),
 
     // --- CATEGORY & PRODUCT (4000 - 4999) ---
     CATEGORY_NOT_FOUND("PRD-4000", "Category not found", HttpStatus.NOT_FOUND),
