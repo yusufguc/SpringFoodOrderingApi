@@ -353,6 +353,7 @@ Apply database migration strategies.
 Build a portfolio-ready backend project.
 
 
-👨‍💻 Author
-Yusuf Guc -Backend Developer (Java & Spring Boot)
+## 👨‍💻 Author
+**Yusuf Guc**  
+Backend Developer (Java & Spring Boot)
 
